@@ -40,9 +40,16 @@ test.describe("Navigation", () => {
 
     await clickNav(page, "Testimonials");
     await expect(page).toHaveURL(/#testimonials$/);
+    // Wait for the smooth scroll to start and fully settle before moving on,
+    // the way a person would.
     await expect
-      .poll(async () => page.evaluate(() => window.scrollY))
-      .toBeGreaterThan(0);
+      .poll(async () => {
+        const before = await page.evaluate(() => window.scrollY);
+        await page.waitForTimeout(250);
+        const after = await page.evaluate(() => window.scrollY);
+        return before > 0 && before === after;
+      })
+      .toBe(true);
 
     await clickNav(page, "Home");
     await expect
