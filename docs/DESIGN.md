@@ -52,6 +52,13 @@ Schema (zod, in `src/config/schema.ts`, exported as `configSchema` plus the infe
     serviceArea: string      // "[CITY] and nearby areas"
   },
   services: [ { title: string, description: string, included: string[], icon?: string } ],  // min 1
+  home: {                       // optional block, every field optional
+    eyebrow?: string,           // absent: "Residential cleaning in {serviceArea}"
+    heroTitle?: string,         // absent: business.tagline
+    heroLead?: string,          // absent: the original hero paragraph
+    trust?: [ { icon: string, title: string, text: string } ]  // absent: the original three items; 1 to 4 entries
+  },
+  footer: { blurb?: string },   // absent: "Family run home cleaning serving {serviceArea}. Licensed and insured."
   testimonials: [ { quote: string, name: string } ],
   admin: { githubEditUrl: string }  // used only by the admin page button
 }
@@ -111,6 +118,13 @@ Cards (max width 880 centered):
 2. "Business details": inputs for every `business` field with friendly uppercase labels (BUSINESS NAME, TAGLINE, PHONE (CALLS), PHONE (TEXTS), EMAIL, FACEBOOK PAGE LINK, SERVICE AREA).
 3. "Services": one row per service: title input, description textarea, included list editor (one line per item, a plain textarea with one item per line is fine), an ICON picker, red outline trash button, dashed "+ Add a service" button. At least one service must remain; disable the last trash button.
 
+### Home page card (admin)
+
+Between the status card and Business details, a "Home page" card edits the `home` and `footer` blocks:
+- EYEBROW, HERO TITLE, HERO PARAGRAPH (textarea), FOOTER BLURB (textarea) inputs. Each shows the effective current value (the fallback when the field is unset) so she edits what she sees; an edited value writes the config field, and a value left exactly equal to the fallback keeps the field unset so fallbacks stay live.
+- TRUST ITEMS: the three (up to four, minimum one) trust strip rows, each with an icon picker (same picker and icon set as services), a title input, and a text input. Add and remove buttons like services rows.
+- The icon set gains `heart`, `pin`, `star`, `shield`, and `leaf` so the current trust icons stay available; services may use them too.
+
 ### Service icons
 
 A fixed set of inline stroke SVG icons (feather style, 2px stroke, currentColor), defined once in `src/components/serviceIcons.tsx` as a name to component map. Names: `calendar`, `sparkles`, `box`, `house`, `spray`, `bucket`, `broom`, `bathtub`, `bed`, `window`, `truck`, `key`. Each icon must be clean and recognizable at 26px.
@@ -124,7 +138,7 @@ Sticky bottom bar (white, top border):
 - "Preview my changes" (sky outline pill): saves the draft to localStorage key `neatbliss-draft` and navigates to `/`. While a draft exists the public site renders from the draft and shows a fixed floating pill bottom center: "Previewing your changes" + button "Back to editing" (returns to admin) + button "Discard" (clears draft). The draft never affects other visitors; it is localStorage only.
 - "Copy my settings" (green pill): copies pretty printed JSON (2 space indent, trailing newline) of the current form state to the clipboard, validated through `configSchema` first; on success flips to "Copied!" for a moment. Secondary small link "download the file instead" triggers a `config.json` download.
 - "Open the settings file on GitHub" (navy pill): opens `config.admin.githubEditUrl` in a new tab.
-- Helper line: "After you copy: on the GitHub page, select everything in the file, paste over it, then press the green Commit changes button. The site updates about a minute later."
+- Helper line: "After you copy: on the GitHub page, select everything in the file, paste over it, then press the green Commit changes button. The site updates about 15 minutes later."
 
 Form state initializes from the currently loaded config. Every mutation goes through typed state; the page can never emit invalid JSON. No routing guard, no auth: the page is harmless by design.
 
@@ -149,4 +163,4 @@ Form state initializes from the currently loaded config. Every mutation goes thr
 
 ## HOW-TO.md (repo root, written for the owner, not for developers)
 
-Plain, warm, short sentences, no jargon beyond the exact GitHub button names. Sections: what this site is; how to change the message at the top (bookmark the settings page link, edit, preview, Copy my settings, Open the settings file on GitHub, select everything, paste, green Commit changes button, wait about a minute); what the email from GitHub means if the update failed (nothing changed on the site, go back and copy paste again); how to change phone number, services, or reviews (same flow). Placeholder for screenshots marked with `<!-- screenshot: ... -->` comments.
+Plain, warm, short sentences, no jargon beyond the exact GitHub button names. Sections: what this site is; how to change the message at the top (bookmark the settings page link, edit, preview, Copy my settings, Open the settings file on GitHub, select everything, paste, green Commit changes button, wait about 15 minutes); what the email from GitHub means if the update failed (nothing changed on the site, go back and copy paste again); how to change phone number, services, or reviews (same flow). Placeholder for screenshots marked with `<!-- screenshot: ... -->` comments.

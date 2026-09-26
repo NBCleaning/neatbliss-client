@@ -604,7 +604,7 @@ export function AdminPage() {
           <p className={styles.actionHelp}>
             After you copy: on the GitHub page, select everything in the file,
             paste over it, then press the green Commit changes button. The site
-            updates about a minute later.
+            updates about 15 minutes later.
           </p>
         </div>
       </div>

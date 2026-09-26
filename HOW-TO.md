@@ -29,7 +29,7 @@ Use this when your schedule is full, or when you have news everyone should see b
 7. Click **Open the settings file on GitHub**. A new tab opens with the current settings file.
 8. On the GitHub page, click the little pencil icon to edit. Select everything in the file, then paste. The old settings are replaced by the new ones you just copied.
 9. Scroll to the bottom of the GitHub page. Type a short note in the message box if you like, then click the green **Commit changes** button. Confirm on the next screen.
-10. Wait about a minute. Then open your site in a new tab. Your message is up.
+10. Wait about 15 minutes. Then open your site in a new tab. Your message is up.
 
 <!-- screenshot: settings page with the message card highlighted -->
 <!-- screenshot: preview pill at the bottom of the site with Back to editing and Discard -->
@@ -49,7 +49,7 @@ This usually happens because a copy and paste missed a piece of the file. The fi
 3. Click **Copy my settings** again.
 4. Click **Open the settings file on GitHub**. Click the pencil. Select all. Paste.
 5. Scroll down. Click the green **Commit changes** button. Confirm.
-6. Wait about a minute and check the site.
+6. Wait about 15 minutes and check the site.
 
 If you get the failure email a second time, take a screenshot of it and send it along with what you were trying to change. Then leave the site alone. It is still fine.
 
@@ -71,7 +71,7 @@ For any of them:
 4. Click **Copy my settings**.
 5. Click **Open the settings file on GitHub**, pencil, select all, paste.
 6. Click the green **Commit changes** button.
-7. Wait about a minute. Refresh the site.
+7. Wait about 15 minutes. Refresh the site.
 
 <!-- screenshot: business details card on the settings page -->
 <!-- screenshot: services card with the add and trash buttons visible -->
