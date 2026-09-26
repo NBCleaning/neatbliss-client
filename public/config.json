@@ -46,15 +46,6 @@
         "Ready for the final walkthrough"
       ],
       "icon": "truck"
-    },
-    {
-      "title": "Office cleaning",
-      "description": "Clean your office",
-      "included": [
-        "ben test 1",
-        "ben test 2"
-      ],
-      "icon": "key"
     }
   ],
   "testimonials": [
@@ -69,41 +60,8 @@
     {
       "quote": "[One more review, kept short and warm. Copy word for word from your Facebook page.]",
       "name": "[Client first name and last initial]"
-    },
-    {
-      "quote": "ben test test test....",
-      "name": "Ben Kile"
     }
   ],
-  "home": {
-    "heroTitle": "Come home to a little bliss...",
-    "heroLead": "NeatBliss is a family run home cleaning service. Recurring cleans, deep cleans, and move in or move out cleans, all done with care by people who treat your home like their own...",
-    "trust": [
-      {
-        "icon": "calendar",
-        "title": "Family owned...",
-        "text": "Run by people who care about your home..."
-      },
-      {
-        "icon": "calendar",
-        "title": "One year in business...",
-        "text": "And just getting started..."
-      },
-      {
-        "icon": "calendar",
-        "title": "Serving Conrad, MT and surrounding areas",
-        "text": "text 1234"
-      },
-      {
-        "icon": "calendar",
-        "title": "Trust item 4",
-        "text": "text for trust item 4"
-      }
-    ]
-  },
-  "footer": {
-    "blurb": "Family run home cleaning serving Conrad, MT. Licensed and insured..."
-  },
   "admin": {
     "githubEditUrl": "https://github.com/NBCleaning/neatbliss-client/edit/main/public/config.json"
   }
