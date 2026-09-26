@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { configSchema } from "../src/config/schema";
+import { interceptConfig, loadConfig } from "./fixtures";
 
 const ADMIN_ROUTE = "/7ae5fff6-e9af-4876-86b8-8dfb7a1a0811";
 
@@ -162,6 +163,14 @@ test.describe("Admin flow", () => {
         },
       });
     });
+
+    // Pin the config: the omit-untouched assertions below require the
+    // loaded config to have no explicit home or footer blocks, whatever
+    // the repo's real config currently sets.
+    const base = loadConfig();
+    delete base.home;
+    delete base.footer;
+    await interceptConfig(page, base);
 
     await page.goto(ADMIN_ROUTE);
     const homeCard = page.locator('section[aria-labelledby="card-home"]');
