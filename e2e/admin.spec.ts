@@ -37,10 +37,14 @@ test.describe("Admin flow", () => {
     const toggle = page.getByRole("switch", {
       name: /Show message at the top of the site/i,
     });
-    if ((await toggle.getAttribute("aria-checked")) !== "true") {
-      await toggle.click();
-    }
-    await expect(toggle).toHaveAttribute("aria-checked", "true");
+    // Turn the toggle on, retrying: the initial read can race the config
+    // load, and a click made on stale state flips it the wrong way once.
+    await expect(async () => {
+      if ((await toggle.getAttribute("aria-checked")) !== "true") {
+        await toggle.click();
+      }
+      expect(await toggle.getAttribute("aria-checked")).toBe("true");
+    }).toPass({ timeout: 10_000 });
 
     const uniqueMessage = `E2E preview banner ${Date.now()}`;
     const messageBox = page.getByLabel("MESSAGE", { exact: true });
@@ -137,6 +141,71 @@ test.describe("Admin flow", () => {
     if (result.success) {
       expect(result.data.services[0].icon).toBe("house");
     }
+  });
+
+  test("home page card: edit hero title and a trust item, preview, copy", async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      const nav = navigator as Navigator & {
+        clipboard: { writeText: (t: string) => Promise<void> };
+      };
+      const win = window as unknown as { __e2eClipboard?: string };
+      win.__e2eClipboard = "";
+      Object.defineProperty(nav, "clipboard", {
+        configurable: true,
+        value: {
+          writeText: async (text: string) => {
+            (window as unknown as { __e2eClipboard: string }).__e2eClipboard =
+              text;
+          },
+        },
+      });
+    });
+
+    await page.goto(ADMIN_ROUTE);
+    const homeCard = page.locator('section[aria-labelledby="card-home"]');
+    await expect(homeCard).toBeVisible();
+
+    const heroTitle = `Bliss e2e ${Date.now()}`;
+    await homeCard.getByLabel("HERO TITLE", { exact: true }).fill(heroTitle);
+
+    const firstTrustPicker = homeCard.getByRole("group", {
+      name: "Icon for trust item 1",
+    });
+    await firstTrustPicker.getByRole("button", { name: "shield" }).click();
+    await homeCard.getByLabel("TITLE", { exact: true }).first()
+      .fill("Fully insured");
+
+    await page.getByRole("button", { name: "Preview my changes" }).click();
+    await expect(page).toHaveURL(/\/$/);
+    await expect(
+      page.getByRole("heading", { level: 1, name: heroTitle }),
+    ).toBeVisible();
+    await expect(page.getByText("Fully insured")).toBeVisible();
+    await expect(
+      page.locator('svg[data-icon="shield"]').first(),
+    ).toBeVisible();
+
+    await page
+      .getByRole("region", { name: /Previewing draft settings/i })
+      .getByRole("button", { name: "Back to editing" })
+      .click();
+
+    await page.getByRole("button", { name: "Copy my settings" }).click();
+    await expect(page.getByRole("button", { name: "Copied!" })).toBeVisible();
+    const clipboardText = await page.evaluate(
+      () =>
+        (window as unknown as { __e2eClipboard?: string }).__e2eClipboard ??
+        "",
+    );
+    const parsed = JSON.parse(clipboardText);
+    expect(configSchema.safeParse(parsed).success).toBe(true);
+    expect(parsed.home.heroTitle).toBe(heroTitle);
+    expect(parsed.home.trust[0].icon).toBe("shield");
+    expect(parsed.home.trust[0].title).toBe("Fully insured");
+    expect(parsed.home.eyebrow).toBeUndefined();
+    expect(parsed.footer).toBeUndefined();
   });
 
   test("weird phone number shows an inline error and blocks copying", async ({

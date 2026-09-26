@@ -79,6 +79,7 @@ describe("admin form helpers", () => {
         },
       ],
       testimonials: [],
+      home: configToForm(defaultConfig).home,
       admin: { githubEditUrl: "https://example.com" },
     };
     const cfg = formToConfig(form);
@@ -99,6 +100,7 @@ describe("admin form helpers", () => {
         },
       ],
       testimonials: [],
+      home: configToForm(defaultConfig).home,
       admin: { githubEditUrl: "https://example.com" },
     };
     const cfg = formToConfig(form);
@@ -119,6 +121,7 @@ describe("admin form helpers", () => {
         },
       ],
       testimonials: [],
+      home: configToForm(defaultConfig).home,
       admin: { githubEditUrl: "https://example.com" },
     };
     const cfg = formToConfig(form);

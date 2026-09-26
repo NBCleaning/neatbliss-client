@@ -12,6 +12,7 @@ import {
   configToForm,
   emptyService,
   emptyTestimonial,
+  emptyTrust,
   validateForm,
   type FormState,
 } from "./Admin.helpers";
@@ -85,6 +86,52 @@ export function AdminPage() {
   function updateStatus(patch: Partial<FormState["status"]>) {
     touchForm();
     setForm((prev) => ({ ...prev, status: { ...prev.status, ...patch } }));
+  }
+
+  function updateHome(
+    patch: Partial<
+      Pick<
+        FormState["home"],
+        "eyebrow" | "heroTitle" | "heroLead" | "footerBlurb"
+      >
+    >,
+  ) {
+    touchForm();
+    setForm((prev) => ({ ...prev, home: { ...prev.home, ...patch } }));
+  }
+
+  function patchTrust(
+    index: number,
+    patch: Partial<Omit<FormState["home"]["trust"][number], "id">>,
+  ) {
+    touchForm();
+    setForm((prev) => {
+      const next = prev.home.trust.slice();
+      next[index] = { ...next[index], ...patch };
+      return { ...prev, home: { ...prev.home, trust: next } };
+    });
+  }
+
+  function addTrust() {
+    touchForm();
+    setForm((prev) =>
+      prev.home.trust.length >= 4
+        ? prev
+        : {
+            ...prev,
+            home: { ...prev.home, trust: [...prev.home.trust, emptyTrust()] },
+          },
+    );
+  }
+
+  function removeTrust(index: number) {
+    touchForm();
+    setForm((prev) => {
+      if (prev.home.trust.length <= 1) return prev;
+      const next = prev.home.trust.slice();
+      next.splice(index, 1);
+      return { ...prev, home: { ...prev.home, trust: next } };
+    });
   }
 
   function updateBusiness(patch: Partial<FormState["business"]>) {
@@ -302,6 +349,134 @@ export function AdminPage() {
                 {preset}
               </button>
             ))}
+          </div>
+        </section>
+
+        <section className={styles.card} aria-labelledby="card-home">
+          <h2 id="card-home" className={styles.cardTitle}>
+            Home page
+          </h2>
+          <div className={styles.grid2}>
+            <BusinessField
+              label="EYEBROW"
+              value={form.home.eyebrow}
+              onChange={(v) => updateHome({ eyebrow: v })}
+            />
+            <BusinessField
+              label="HERO TITLE"
+              value={form.home.heroTitle}
+              onChange={(v) => updateHome({ heroTitle: v })}
+            />
+          </div>
+          <div className={styles.field}>
+            <label className={styles.fieldLabel} htmlFor="home-hero-lead">
+              HERO PARAGRAPH
+            </label>
+            <textarea
+              id="home-hero-lead"
+              className={styles.textarea}
+              rows={3}
+              value={form.home.heroLead}
+              onChange={(e) => updateHome({ heroLead: e.target.value })}
+            />
+          </div>
+          <div className={styles.field}>
+            <label className={styles.fieldLabel} htmlFor="home-footer-blurb">
+              FOOTER BLURB
+            </label>
+            <textarea
+              id="home-footer-blurb"
+              className={styles.textarea}
+              rows={2}
+              value={form.home.footerBlurb}
+              onChange={(e) => updateHome({ footerBlurb: e.target.value })}
+            />
+          </div>
+          <h3 className={styles.fieldLabel} style={{ marginTop: 8 }}>
+            TRUST ITEMS
+          </h3>
+          <div className={styles.rowList}>
+            {form.home.trust.map((item, index) => (
+              <div key={item.id} className={styles.row}>
+                <div className={styles.rowHeader}>
+                  <span className={styles.rowIndex}>
+                    Trust item {index + 1}
+                  </span>
+                  <button
+                    type="button"
+                    className={styles.trashBtn}
+                    onClick={() => removeTrust(index)}
+                    disabled={form.home.trust.length <= 1}
+                    aria-label={`Remove trust item ${index + 1}`}
+                    title={
+                      form.home.trust.length <= 1
+                        ? "Keep at least one item"
+                        : "Remove this item"
+                    }
+                  >
+                    <TrashIcon />
+                  </button>
+                </div>
+                <div className={styles.field}>
+                  <span className={styles.fieldLabel}>ICON</span>
+                  <div
+                    className={styles.iconPicker}
+                    role="group"
+                    aria-label={`Icon for trust item ${index + 1}`}
+                  >
+                    {SERVICE_ICON_NAMES.map((name) => {
+                      const Icon = getServiceIcon(name, index);
+                      const isSelected = item.icon === name;
+                      return (
+                        <button
+                          key={name}
+                          type="button"
+                          className={`${styles.iconBtn} ${
+                            isSelected ? styles.iconBtnSelected : ""
+                          }`}
+                          aria-pressed={isSelected}
+                          aria-label={name}
+                          onClick={() => patchTrust(index, { icon: name })}
+                        >
+                          <Icon size={22} />
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+                <label className={styles.field}>
+                  <span className={styles.fieldLabel}>TITLE</span>
+                  <input
+                    className={styles.input}
+                    type="text"
+                    value={item.title}
+                    onChange={(e) =>
+                      patchTrust(index, { title: e.target.value })
+                    }
+                  />
+                </label>
+                <label className={styles.field}>
+                  <span className={styles.fieldLabel}>TEXT</span>
+                  <input
+                    className={styles.input}
+                    type="text"
+                    value={item.text}
+                    onChange={(e) =>
+                      patchTrust(index, { text: e.target.value })
+                    }
+                  />
+                </label>
+              </div>
+            ))}
+            {form.home.trust.length < 4 && (
+              <button
+                type="button"
+                className={styles.addBtn}
+                onClick={addTrust}
+              >
+                + Add a trust item
+              </button>
+            )}
           </div>
         </section>
 

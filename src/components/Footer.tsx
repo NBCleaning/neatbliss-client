@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
 import { LogoBadge } from "./LogoBadge";
 import { useConfig } from "../config/ConfigProvider";
+import { resolveHomeContent } from "../config/homeContent";
 import { telHref } from "../lib/phone";
 import styles from "./Footer.module.css";
 
 export function Footer() {
   const { config } = useConfig();
   const { business } = config;
+  const { footerBlurb } = resolveHomeContent(config);
 
   return (
     <footer className={styles.footer}>
@@ -16,10 +18,7 @@ export function Footer() {
             <LogoBadge size={40} showRibbon={false} />
             <span className={styles.brandName}>NeatBliss</span>
           </div>
-          <p className={styles.blurb}>
-            Family run home cleaning serving {business.serviceArea}. Licensed and
-            insured.
-          </p>
+          <p className={styles.blurb}>{footerBlurb}</p>
         </div>
 
         <div className={styles.col}>

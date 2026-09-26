@@ -72,6 +72,41 @@ describe("configSchema", () => {
     expect(configSchema.safeParse(bad).success).toBe(false);
   });
 
+  it("accepts home and footer blocks with valid values", () => {
+    const good = {
+      ...defaultConfig,
+      home: {
+        eyebrow: "Residential cleaning",
+        heroTitle: "A title",
+        trust: [{ icon: "heart", title: "Family owned", text: "" }],
+      },
+      footer: { blurb: "A blurb" },
+    };
+    expect(configSchema.safeParse(good).success).toBe(true);
+  });
+
+  it("rejects a trust item with an unknown icon", () => {
+    const bad = {
+      ...defaultConfig,
+      home: { trust: [{ icon: "unicorn", title: "T", text: "" }] },
+    };
+    expect(configSchema.safeParse(bad).success).toBe(false);
+  });
+
+  it("rejects empty and oversized trust arrays", () => {
+    const item = { icon: "star", title: "T", text: "" };
+    expect(
+      configSchema.safeParse({ ...defaultConfig, home: { trust: [] } })
+        .success,
+    ).toBe(false);
+    expect(
+      configSchema.safeParse({
+        ...defaultConfig,
+        home: { trust: [item, item, item, item, item] },
+      }).success,
+    ).toBe(false);
+  });
+
   it("rejects services when not an array", () => {
     const bad = { ...defaultConfig, services: "nope" as unknown as [] };
     const result = configSchema.safeParse(bad);

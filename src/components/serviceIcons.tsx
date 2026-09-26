@@ -13,6 +13,11 @@ export const SERVICE_ICON_NAMES = [
   "window",
   "truck",
   "key",
+  "heart",
+  "pin",
+  "star",
+  "shield",
+  "leaf",
 ] as const;
 
 export type ServiceIconName = (typeof SERVICE_ICON_NAMES)[number];
@@ -168,7 +173,54 @@ function KeyIcon(props: ServiceIconProps) {
   );
 }
 
+function HeartIcon(props: ServiceIconProps) {
+  return (
+    <svg {...baseProps("heart", props)}>
+      <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z" />
+    </svg>
+  );
+}
+
+function PinIcon(props: ServiceIconProps) {
+  return (
+    <svg {...baseProps("pin", props)}>
+      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z" />
+      <circle cx="12" cy="10" r="3" />
+    </svg>
+  );
+}
+
+function StarIcon(props: ServiceIconProps) {
+  return (
+    <svg {...baseProps("star", props)}>
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+    </svg>
+  );
+}
+
+function ShieldIcon(props: ServiceIconProps) {
+  return (
+    <svg {...baseProps("shield", props)}>
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    </svg>
+  );
+}
+
+function LeafIcon(props: ServiceIconProps) {
+  return (
+    <svg {...baseProps("leaf", props)}>
+      <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z" />
+      <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+    </svg>
+  );
+}
+
 const ICONS: Record<ServiceIconName, IconComponent> = {
+  heart: HeartIcon,
+  pin: PinIcon,
+  star: StarIcon,
+  shield: ShieldIcon,
+  leaf: LeafIcon,
   calendar: CalendarIcon,
   sparkles: SparklesIcon,
   box: BoxIcon,

@@ -1,14 +1,9 @@
 import { Link } from "react-router-dom";
 import { useConfig } from "../config/ConfigProvider";
 import { LogoBadge } from "../components/LogoBadge";
-import {
-  HeartIcon,
-  MapPinIcon,
-  SparkleIcon,
-  StarIcon,
-} from "../components/icons";
+import { StarIcon } from "../components/icons";
 import { getServiceIcon } from "../components/serviceIcons";
-import { serviceAreaCity } from "../lib/serviceArea";
+import { resolveHomeContent } from "../config/homeContent";
 import { smsHref, telHref } from "../lib/phone";
 import styles from "./Home.module.css";
 
@@ -18,25 +13,21 @@ const SERVICE_ICON_TINTS = [
   `${styles.serviceIcon} ${styles.serviceIconNavy}`,
 ];
 
+const TRUST_ICON_TINTS = [styles.trustIconGreen, styles.trustIconSky];
+
 export function HomePage() {
   const { config } = useConfig();
   const { business, services, testimonials } = config;
-  const city = serviceAreaCity(business.serviceArea);
+  const content = resolveHomeContent(config);
 
   return (
     <main>
       <section className={styles.hero}>
         <div className={`container ${styles.heroInner}`}>
           <div className={styles.heroCopy}>
-            <span className="eyebrow">
-              RESIDENTIAL CLEANING IN {city.toUpperCase()}
-            </span>
-            <h1 className={styles.heroTitle}>{business.tagline}</h1>
-            <p className={styles.heroLead}>
-              NeatBliss is a family run home cleaning service. Recurring
-              cleans, deep cleans, and move in or move out cleans, all done
-              with care by people who treat your home like their own.
-            </p>
+            <span className="eyebrow">{content.eyebrow}</span>
+            <h1 className={styles.heroTitle}>{content.heroTitle}</h1>
+            <p className={styles.heroLead}>{content.heroLead}</p>
             <div className={styles.heroActions}>
               <Link to="/quote" className="pill pill--green">
                 Get a free quote
@@ -57,45 +48,26 @@ export function HomePage() {
 
       <section className="container">
         <div className={styles.trustStrip}>
-          <div className={styles.trustItem}>
-            <span
-              className={`${styles.trustIcon} ${styles.trustIconGreen}`}
-              aria-hidden="true"
-            >
-              <HeartIcon />
-            </span>
-            <div>
-              <div className={styles.trustLabel}>Family owned</div>
-              <div className={styles.trustSub}>
-                Run by people who care about your home
+          {content.trust.map((item, index) => {
+            const Icon = getServiceIcon(item.icon, index);
+            const tint = TRUST_ICON_TINTS[index % TRUST_ICON_TINTS.length];
+            return (
+              <div className={styles.trustItem} key={`${item.title}-${index}`}>
+                <span
+                  className={`${styles.trustIcon} ${tint}`}
+                  aria-hidden="true"
+                >
+                  <Icon size={22} />
+                </span>
+                <div>
+                  <div className={styles.trustLabel}>{item.title}</div>
+                  {item.text.trim().length > 0 && (
+                    <div className={styles.trustSub}>{item.text}</div>
+                  )}
+                </div>
               </div>
-            </div>
-          </div>
-          <div className={styles.trustItem}>
-            <span
-              className={`${styles.trustIcon} ${styles.trustIconSky}`}
-              aria-hidden="true"
-            >
-              <SparkleIcon />
-            </span>
-            <div>
-              <div className={styles.trustLabel}>One year in business</div>
-              <div className={styles.trustSub}>And just getting started</div>
-            </div>
-          </div>
-          <div className={styles.trustItem}>
-            <span
-              className={`${styles.trustIcon} ${styles.trustIconGreen}`}
-              aria-hidden="true"
-            >
-              <MapPinIcon />
-            </span>
-            <div>
-              <div className={styles.trustLabel}>
-                Serving {business.serviceArea}
-              </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
       </section>
 

@@ -71,6 +71,34 @@ export const configSchema = z.object({
       name: z.string(),
     }),
   ),
+  home: z
+    .object({
+      eyebrow: z.string().optional(),
+      heroTitle: z.string().optional(),
+      heroLead: z.string().optional(),
+      trust: z
+        .array(
+          z.object({
+            icon: z
+              .string()
+              .refine(
+                (v) => (SERVICE_ICON_NAMES as readonly string[]).includes(v),
+                { message: ICON_MESSAGE },
+              ),
+            title: z.string(),
+            text: z.string(),
+          }),
+        )
+        .min(1)
+        .max(4)
+        .optional(),
+    })
+    .optional(),
+  footer: z
+    .object({
+      blurb: z.string().optional(),
+    })
+    .optional(),
   admin: z.object({
     githubEditUrl: z.string(),
   }),
