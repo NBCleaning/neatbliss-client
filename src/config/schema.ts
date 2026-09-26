@@ -176,6 +176,6 @@ export const defaultConfig: SiteConfig = {
     },
   ],
   admin: {
-    githubEditUrl: "https://github.com/benjaminfkile/neatbliss-client/edit/main/public/config.json",
+    githubEditUrl: "https://github.com/NBCleaning/neatbliss-client/edit/main/public/config.json",
   },
 };
