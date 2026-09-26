@@ -38,14 +38,21 @@ export function AdminPage() {
 
   const [form, setForm] = useState<FormState>(() => configToForm(config));
   const initializedFromLoaded = useRef(source !== "defaults");
+  // Once the owner edits anything, a late config fetch must never
+  // overwrite the form.
+  const formTouched = useRef(false);
 
   useEffect(() => {
-    if (initializedFromLoaded.current) return;
+    if (initializedFromLoaded.current || formTouched.current) return;
     if (source !== "defaults") {
       setForm(configToForm(config));
       initializedFromLoaded.current = true;
     }
   }, [source, config]);
+
+  function touchForm() {
+    formTouched.current = true;
+  }
 
   useEffect(() => {
     const meta = document.createElement("meta");
@@ -76,18 +83,22 @@ export function AdminPage() {
   }, [copyState]);
 
   function updateStatus(patch: Partial<FormState["status"]>) {
+    touchForm();
     setForm((prev) => ({ ...prev, status: { ...prev.status, ...patch } }));
   }
 
   function updateBusiness(patch: Partial<FormState["business"]>) {
+    touchForm();
     setForm((prev) => ({ ...prev, business: { ...prev.business, ...patch } }));
   }
 
   function updateAdmin(patch: Partial<FormState["admin"]>) {
+    touchForm();
     setForm((prev) => ({ ...prev, admin: { ...prev.admin, ...patch } }));
   }
 
   function patchService(index: number, patch: Partial<FormState["services"][number]>) {
+    touchForm();
     setForm((prev) => {
       const next = prev.services.slice();
       next[index] = { ...next[index], ...patch };
@@ -96,10 +107,12 @@ export function AdminPage() {
   }
 
   function addService() {
+    touchForm();
     setForm((prev) => ({ ...prev, services: [...prev.services, emptyService()] }));
   }
 
   function removeService(index: number) {
+    touchForm();
     setForm((prev) => {
       if (prev.services.length <= 1) return prev;
       const next = prev.services.slice();
@@ -112,6 +125,7 @@ export function AdminPage() {
     index: number,
     patch: Partial<FormState["testimonials"][number]>,
   ) {
+    touchForm();
     setForm((prev) => {
       const next = prev.testimonials.slice();
       next[index] = { ...next[index], ...patch };
@@ -120,6 +134,7 @@ export function AdminPage() {
   }
 
   function addTestimonial() {
+    touchForm();
     setForm((prev) => ({
       ...prev,
       testimonials: [...prev.testimonials, emptyTestimonial()],
@@ -127,6 +142,7 @@ export function AdminPage() {
   }
 
   function removeTestimonial(index: number) {
+    touchForm();
     setForm((prev) => {
       const next = prev.testimonials.slice();
       next.splice(index, 1);

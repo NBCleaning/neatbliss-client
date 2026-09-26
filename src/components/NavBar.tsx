@@ -15,6 +15,16 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Contact", to: "/quote" },
 ];
 
+function navItemActive(item: NavItem, isActive: boolean, hash: string): boolean {
+  if (item.to === "/#testimonials") {
+    return isActive && hash === "#testimonials";
+  }
+  if (item.to === "/") {
+    return isActive && hash !== "#testimonials";
+  }
+  return isActive;
+}
+
 export function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
@@ -42,7 +52,9 @@ export function NavBar() {
                   to={item.to}
                   end={item.to === "/"}
                   className={({ isActive }) =>
-                    isActive ? `${styles.link} ${styles.linkActive}` : styles.link
+                    navItemActive(item, isActive, location.hash)
+                      ? `${styles.link} ${styles.linkActive}`
+                      : styles.link
                   }
                 >
                   {item.label}
@@ -80,7 +92,7 @@ export function NavBar() {
                   to={item.to}
                   end={item.to === "/"}
                   className={({ isActive }) =>
-                    isActive
+                    navItemActive(item, isActive, location.hash)
                       ? `${styles.mobileLink} ${styles.linkActive}`
                       : styles.mobileLink
                   }

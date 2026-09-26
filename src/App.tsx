@@ -36,16 +36,33 @@ function PublicLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
-function ScrollToHash() {
-  const { hash, pathname } = useLocation();
+function ScrollManager() {
+  const location = useLocation();
   useEffect(() => {
-    if (!hash) return;
-    const id = hash.replace(/^#/, "");
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const behavior: ScrollBehavior = reduced ? "auto" : "smooth";
+
+    if (location.hash) {
+      const id = location.hash.slice(1);
+      // The target section may mount a frame after navigation.
+      let attempts = 0;
+      const tryScroll = () => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior, block: "start" });
+        } else if (attempts < 10) {
+          attempts += 1;
+          window.requestAnimationFrame(tryScroll);
+        }
+      };
+      tryScroll();
+      return;
     }
-  }, [hash, pathname]);
+
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location.pathname, location.hash, location.key]);
   return null;
 }
 
@@ -60,7 +77,7 @@ export default function App() {
   return (
     <ConfigProvider>
       <BrowserRouter basename={basename}>
-        <ScrollToHash />
+        <ScrollManager />
         <Routes>
           <Route
             path="/"
