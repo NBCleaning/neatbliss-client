@@ -51,7 +51,7 @@ export function ConfigProvider({ children }: ConfigProviderProps) {
     if (initialDraft) return;
     let cancelled = false;
     const url = `${import.meta.env.BASE_URL}config.json`;
-    fetch(url)
+    fetch(url, { cache: "no-cache" })
       .then((response) => {
         if (!response.ok) {
           throw new Error(`fetch failed with status ${response.status}`);
@@ -105,7 +105,7 @@ export function ConfigProvider({ children }: ConfigProviderProps) {
     setConfig(defaultConfig);
     setSource("defaults");
     const url = `${import.meta.env.BASE_URL}config.json`;
-    fetch(url)
+    fetch(url, { cache: "no-cache" })
       .then((response) => {
         if (!response.ok) throw new Error(`status ${response.status}`);
         return response.json();
