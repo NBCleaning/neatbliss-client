@@ -102,3 +102,16 @@
   height: auto;
 }
 
+
+.bbbSeal {
+  display: inline-block;
+  align-self: flex-start;
+  width: fit-content;
+  margin-top: 14px;
+  background: #FFFFFF;
+  border-radius: 6px;
+  padding: 4px 6px;
+  line-height: 0;
+}
+
+

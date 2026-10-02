@@ -24,6 +24,19 @@ export function Footer() {
             <span className={styles.brandName}>NeatBliss</span>
           </div>
           <p className={styles.blurb}>{footerBlurb}</p>
+          <a
+            href="https://www.bbb.org/us/mt/conrad/profile/house-cleaning/neatbliss-cleaning-llc-1296-1000194176/#sealclick"
+            target="_blank"
+            rel="nofollow noopener noreferrer"
+            className={styles.bbbSeal}
+          >
+            <img
+              src="https://seal-alaskaoregonwesternwashington.bbb.org/seals/blue-seal-120-61-bbb-1000194176.png"
+              alt="NeatBliss Cleaning LLC BBB Business Review"
+              width="120"
+              height="61"
+            />
+          </a>
         </div>
 
         <div className={styles.col}>
