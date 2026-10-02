@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { LogoBadge } from "./LogoBadge";
 import styles from "./NavBar.module.css";
 
 interface NavItem {
@@ -37,7 +36,13 @@ export function NavBar() {
     <header className={styles.header}>
       <div className={styles.inner}>
         <NavLink to="/" className={styles.brand} aria-label="NeatBliss home">
-          <LogoBadge size={44} showRibbon={false} />
+          <img
+            src={`${import.meta.env.BASE_URL}logo.webp`}
+            alt=""
+            className={styles.brandLogo}
+            width="48"
+            height="44"
+          />
           <span className={styles.wordmark}>
             <span className={styles.brandName}>NeatBliss</span>
             <span className={styles.brandSub}>HOME CLEANING</span>

@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { LogoBadge } from "./LogoBadge";
 import { useConfig } from "../config/ConfigProvider";
 import { resolveHomeContent } from "../config/homeContent";
 import { telHref } from "../lib/phone";
@@ -15,7 +14,13 @@ export function Footer() {
       <div className={styles.inner}>
         <div className={styles.brandCol}>
           <div className={styles.brandRow}>
-            <LogoBadge size={40} showRibbon={false} />
+            <img
+              src={`${import.meta.env.BASE_URL}logo.webp`}
+              alt=""
+              className={styles.brandLogo}
+              width="44"
+              height="40"
+            />
             <span className={styles.brandName}>NeatBliss</span>
           </div>
           <p className={styles.blurb}>{footerBlurb}</p>
