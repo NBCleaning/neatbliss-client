@@ -75,6 +75,11 @@
   align-items: center;
 }
 
+.heroLogo {
+  width: min(330px, 70vw);
+  height: auto;
+}
+
 .section {
   padding: 64px 0;
 }

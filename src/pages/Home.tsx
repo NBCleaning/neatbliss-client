@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { useConfig } from "../config/ConfigProvider";
-import { LogoBadge } from "../components/LogoBadge";
 import { StarIcon } from "../components/icons";
 import { getServiceIcon } from "../components/serviceIcons";
 import { resolveHomeContent } from "../config/homeContent";
@@ -41,7 +40,13 @@ export function HomePage() {
             </div>
           </div>
           <div className={styles.heroBadge}>
-            <LogoBadge size={280} />
+            <img
+              src={`${import.meta.env.BASE_URL}logo.webp`}
+              alt="NeatBliss logo"
+              className={styles.heroLogo}
+              width="330"
+              height="304"
+            />
           </div>
         </div>
       </section>
